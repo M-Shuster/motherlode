@@ -12,6 +12,7 @@ Multi page application which will contain:
 - Suggested activities/experiences
 
 Features to potentially implement
+
 - Parallax scrolling
 - Video backgrounds
 - Interactive mouse events; hovers, clicks etc
