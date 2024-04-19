@@ -9,18 +9,18 @@ export default function LoginPage() {
         src="/login-background-desktop.jpeg"
         layout="fill"
         objectFit="cover"
-        className="hidden md:block"
+        className="hidden opacity-75 md:block"
         alt="Login page desktop background image"
       />
       <Image
         src="/login-background-mobile.jpeg"
         layout="fill"
         objectFit="cover"
-        className=" block md:hidden"
+        className=" block opacity-75 md:hidden"
         alt="Login page mobile background image"
       />
       <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
-        <div className="flex h-20 w-full items-end rounded-lg bg-green-800 p-3  md:h-36">
+        <div className="flex h-20 w-full items-end rounded-lg bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-40% to-emerald-500 to-90% p-3  md:h-36">
           <div className="w-32 text-white md:w-36">
             <AcmeLogo />
           </div>
