@@ -8,9 +8,9 @@ const users = [
     password: '123456',
   },
   {
-    id: 'm45t3r-4001-4271-9855-fec4b6a6442a',
+    id: '410544b2-4001-4271-9855-fec4b6a6442b',
     name: 'Master',
-    email: 'master',
+    email: 'master@mail.com',
     password: 'password',
   },
 ];
@@ -186,7 +186,7 @@ const revenue = [
   { month: 'Dec', revenue: 4800 },
 ];
 
-export default {
+module.exports = {
   users,
   customers,
   invoices,
