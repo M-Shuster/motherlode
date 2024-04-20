@@ -26,5 +26,5 @@ https://www.digitalsilk.com/digital-trends/website-animations/
 https://www.forbes.com/advisor/business/how-to-make-a-website-for-your-business/
 
 Login Info:
-user@next.com
+user@nextmail.com
 123456
