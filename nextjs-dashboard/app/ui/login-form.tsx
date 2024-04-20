@@ -61,7 +61,7 @@ export default function LoginForm() {
             </div>
             <div>
               <Link
-                href="/forgotten-password"
+                href="/login/reset"
                 className=" flex justify-end rounded-md py-2 pr-1 text-sm text-blue-400 transition-colors hover:underline"
               >
                 Forgotten password?
