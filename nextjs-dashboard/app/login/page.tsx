@@ -7,14 +7,14 @@ export default function LoginPage() {
     <main className="flex items-center justify-center md:h-screen">
       <Image
         src="/login-background-desktop.jpeg"
-        layout="fill"
+        fill
         objectFit="cover"
         className="hidden opacity-75 md:block"
         alt="Login page desktop background image"
       />
       <Image
         src="/login-background-mobile.jpeg"
-        layout="fill"
+        fill
         objectFit="cover"
         className=" block opacity-75 md:hidden"
         alt="Login page mobile background image"
