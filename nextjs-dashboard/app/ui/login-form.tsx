@@ -10,6 +10,7 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
@@ -57,6 +58,14 @@ export default function LoginForm() {
                 minLength={6}
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+            <div>
+              <Link
+                href="/forgotten-password"
+                className=" flex justify-end rounded-md py-2 pr-1 text-sm text-blue-400 transition-colors hover:underline"
+              >
+                Forgotten password?
+              </Link>
             </div>
           </div>
         </div>

@@ -33,10 +33,14 @@ export const windSong = WindSong({
 export const tiltNeon = Tilt_Neon({
   subsets: ['latin'],
   weight: ['400'],
+  display: 'swap',
+  variable: '--font-sans',
 });
 
 // 8-bit retro
 export const pixelifySans = Pixelify_Sans({
   subsets: ['latin'],
   weight: ['400'],
+  display: 'swap',
+  variable: '--font-sans',
 });
