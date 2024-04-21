@@ -11,7 +11,6 @@ export default function NotFoundRoot() {
           src="/darthVaderPixelated.jpeg"
           width={320}
           height={320}
-          // className="hidden md:block"
           alt="Root 404 error image"
         />
         <h3
