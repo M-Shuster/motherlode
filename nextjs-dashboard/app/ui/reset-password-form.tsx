@@ -12,7 +12,7 @@ export default function ResetPasswordForm() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log('Input value on submit: ', inputValue);
+    console.log('Input value on submit: ', inputValue); // we need to save this somewhere in state to be used in a magic link generator
     window.location.href = '/login/reset/submit';
   }
   return (
