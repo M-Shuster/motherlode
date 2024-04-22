@@ -4,9 +4,8 @@ import {
   UserGroupIcon,
   InboxIcon,
 } from '@heroicons/react/24/outline';
-import { lusitana } from '@/app/ui/fonts';
+import { tajawal } from '@/app/ui/fonts';
 import { fetchCardData } from '@/app/lib/data';
-
 
 const iconMap = {
   collected: BanknotesIcon,
@@ -16,7 +15,12 @@ const iconMap = {
 };
 
 export default async function CardWrapper() {
-  const {totalPaidInvoices, totalPendingInvoices, numberOfInvoices, numberOfCustomers} = await fetchCardData();
+  const {
+    totalPaidInvoices,
+    totalPendingInvoices,
+    numberOfInvoices,
+    numberOfCustomers,
+  } = await fetchCardData();
   return (
     <>
       {/* NOTE: comment in this code when you get to this point in the course */}
@@ -51,7 +55,7 @@ export function Card({
         <h3 className="ml-2 text-sm font-medium">{title}</h3>
       </div>
       <p
-        className={`${lusitana.className}
+        className={`${tajawal.className}
           truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
       >
         {value}

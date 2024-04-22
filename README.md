@@ -24,3 +24,7 @@ Examples webpages:
 https://webflow.com/interactions-animations
 https://www.digitalsilk.com/digital-trends/website-animations/
 https://www.forbes.com/advisor/business/how-to-make-a-website-for-your-business/
+
+Login Info:
+user@nextmail.com
+123456

@@ -1,6 +1,6 @@
 'use client';
 
-import { lusitana } from '@/app/ui/fonts';
+import { tiltNeon } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
   KeyIcon,
@@ -10,14 +10,15 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
   return (
     <form action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1 className={`${lusitana.className} mb-3 text-2xl`}>
-          Please log in to continue.
+        <h1 className={`${tiltNeon.className} mb-3 text-2xl`}>
+          Login to continue
         </h1>
         <div className="w-full">
           <div>
@@ -58,9 +59,16 @@ export default function LoginForm() {
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+            <div>
+              <Link
+                href="/login/reset"
+                className=" flex justify-end rounded-md py-2 pr-1 text-sm text-blue-400 transition-colors hover:underline"
+              >
+                Forgotten password?
+              </Link>
+            </div>
           </div>
         </div>
-        <LoginButton />
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
@@ -73,9 +81,10 @@ export default function LoginForm() {
             </>
           )}
         </div>
-        <div className="flex h-8 items-end space-x-1">
-          {/* Add form errors here */}
-        </div>
+        <LoginButton />
+        {/* <div className="flex h-8 items-end space-x-1">
+          Add form errors here
+        </div> */}
       </div>
     </form>
   );
@@ -84,7 +93,7 @@ export default function LoginForm() {
 function LoginButton() {
   const { pending } = useFormStatus();
   return (
-    <Button className="mt-4 w-full" aria-disabled={pending}>
+    <Button className="m-auto mt-4 w-1/2" aria-disabled={pending}>
       Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
     </Button>
   );

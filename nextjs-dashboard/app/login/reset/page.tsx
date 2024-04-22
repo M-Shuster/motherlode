@@ -1,21 +1,21 @@
 import MDWLogo from '@/app/ui/mdw-logo';
-import LoginForm from '@/app/ui/login-form';
+import ResetPasswordForm from '@/app/ui/reset-password-form';
 import Image from 'next/image';
 
-export default function LoginPage() {
+export default function LoginPageReset() {
   return (
     <main className="flex items-center justify-center md:h-screen">
       <Image
         src="/login-background-desktop.jpeg"
         fill
-        style={{ objectFit: 'cover' }}
+        objectFit="cover"
         className="hidden opacity-75 md:block"
         alt="Login page desktop background image"
       />
       <Image
         src="/login-background-mobile.jpeg"
         fill
-        style={{ objectFit: 'cover' }}
+        objectFit="cover"
         className=" block opacity-75 md:hidden"
         alt="Login page mobile background image"
       />
@@ -25,7 +25,7 @@ export default function LoginPage() {
             <MDWLogo />
           </div>
         </div>
-        <LoginForm />
+        <ResetPasswordForm />
       </div>
     </main>
   );
