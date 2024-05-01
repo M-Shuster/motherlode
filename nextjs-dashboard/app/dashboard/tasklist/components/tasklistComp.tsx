@@ -118,7 +118,6 @@ const TasklistComp: React.FC = () => {
     if (inputRef.current) inputRef.current.focus();
   }, []);
 
-  //TODO: change this as its just awful
   const liStyle = {
     textDecoration: 'line-through',
     fontWeight: '100',
@@ -160,34 +159,43 @@ const TasklistComp: React.FC = () => {
     );
   });
   return (
-    <div className="TasklistComp">
-      <div className="TasklistComp_child">
-        <Header />
-        <TaskForm
-          onSubmit={handleSubmit}
-          value={newTask}
-          onChange={handleChange}
-          onClick={!isEditing ? handleClear : handleCancel}
-          isEditing={isEditing}
-          reference={inputRef}
-        />
-        <Tasklist>
-          {tasks.length > 0 ? (
-            TaskLists
-          ) : (
-            <span className="no-task flex flex-row">
-              <ListBulletIcon className="md:5 mr-1 w-4" />
-              <span className="no-task-p">Add tasks above</span>
-            </span>
-          )}
-        </Tasklist>
+    <>
+      <div
+        className={`TasklistComp ${
+          isModalOpen ? 'modal-open' : ''
+        }w-4/6 rounded bg-slate-100 p-4 shadow-md`}
+      >
+        <div className="TasklistComp_child">
+          <Header />
+          <TaskForm
+            onSubmit={handleSubmit}
+            value={newTask}
+            onChange={handleChange}
+            onClick={!isEditing ? handleClear : handleCancel}
+            isEditing={isEditing}
+            reference={inputRef}
+          />
+          <Tasklist>
+            {tasks.length > 0 ? (
+              TaskLists
+            ) : (
+              <span className="no-task mt-2 flex flex-row">
+                <ListBulletIcon className="md:5 mr-1 w-4" />
+                <span className="no-task-p">Add tasks above</span>
+              </span>
+            )}
+          </Tasklist>
+        </div>
+      </div>
+      <div className="flex flex-col items-center justify-center">
         <ConfirmModal
           isOpen={isModalOpen}
           onClose={handleCancelClear}
           onConfirm={handleConfirmClear}
+          modalClassName={isModalOpen ? 'modal-open' : ''}
         />
       </div>
-    </div>
+    </>
   );
 };
 

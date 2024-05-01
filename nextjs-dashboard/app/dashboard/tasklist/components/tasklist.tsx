@@ -6,8 +6,8 @@ interface TasklistProps {
 
 const Tasklist: React.FC<TasklistProps> = ({ children }) => {
   return (
-    <div className="TodoList-container">
-      <ul className="TodoList">{children}</ul>
+    <div className="Tasklist-container mt-4">
+      <ul className="Tasklist">{children}</ul>
     </div>
   );
 };

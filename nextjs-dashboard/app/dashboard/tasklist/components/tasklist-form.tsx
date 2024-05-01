@@ -7,7 +7,7 @@ const TaskForm = (props: any) => {
       <form className="TasklistForm" onSubmit={props.onSubmit}>
         <div className="align-center flex  flex-row">
           <input
-            className="form-input mb-1 mr-1 rounded"
+            className="form-input mb-1 mr-1 w-full rounded"
             type="text"
             placeholder="Add a task..."
             value={props.value}
@@ -23,7 +23,7 @@ const TaskForm = (props: any) => {
             <TrashIcon className="w-5" />
           </button>
         </div>
-        <div className="btn-container">
+        <div className="btn-container mt-2">
           <button
             className="mr-1 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
             type="submit"
