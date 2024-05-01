@@ -8,14 +8,14 @@ export default function LoginPageReset() {
       <Image
         src="/login-background-desktop.jpeg"
         fill
-        objectFit="cover"
+        style={{ objectFit: 'cover' }}
         className="hidden opacity-75 md:block"
         alt="Login page desktop background image"
       />
       <Image
         src="/login-background-mobile.jpeg"
         fill
-        objectFit="cover"
+        style={{ objectFit: 'cover' }}
         className=" block opacity-75 md:hidden"
         alt="Login page mobile background image"
       />
