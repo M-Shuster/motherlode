@@ -127,11 +127,11 @@ const TasklistComp: React.FC = () => {
   const TaskLists = tasks.map((task) => {
     return (
       <li
-        className="list"
+        className="list mb-2 flex w-full flex-row items-center justify-between rounded-lg bg-slate-50 py-2 hover:bg-slate-200"
         style={task.completed ? liStyle : { textDecoration: 'none' }}
         key={task.id}
       >
-        {task.title}
+        <span className="ml-2">{task.title}</span>
         <div>
           <button
             title="Delete"
@@ -149,7 +149,7 @@ const TasklistComp: React.FC = () => {
           </button>
           <button
             title="Complete"
-            className="mr-1 rounded bg-yellow-500 px-4 py-2 font-bold text-white hover:bg-yellow-700"
+            className="mr-2 rounded bg-yellow-500 px-4 py-2 font-bold text-white hover:bg-yellow-700"
             onClick={() => handleCheck(task.title, task.id)}
           >
             <CheckBadgeIcon className="w-3 md:w-4" />
@@ -163,7 +163,7 @@ const TasklistComp: React.FC = () => {
       <div
         className={`TasklistComp ${
           isModalOpen ? 'modal-open' : ''
-        }w-4/6 rounded bg-slate-100 p-4 shadow-md`}
+        }w-4/6 rounded-xl bg-slate-100 p-4 shadow-md`}
       >
         <div className="TasklistComp_child">
           <Header />
@@ -174,6 +174,11 @@ const TasklistComp: React.FC = () => {
             onClick={!isEditing ? handleClear : handleCancel}
             isEditing={isEditing}
             reference={inputRef}
+            onKeyDown={function (
+              event: React.KeyboardEvent<HTMLFormElement>,
+            ): void {
+              throw new Error('Function not implemented.');
+            }}
           />
           <Tasklist>
             {tasks.length > 0 ? (

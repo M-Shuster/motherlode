@@ -1,24 +1,52 @@
 import { TrashIcon } from '@heroicons/react/20/solid';
 import React from 'react';
 
-const TaskForm = (props: any) => {
+interface TaskFormProps {
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  reference: React.RefObject<HTMLInputElement>;
+  onClick: () => void;
+  isEditing: boolean;
+  onKeyDown: (event: React.KeyboardEvent<HTMLFormElement>) => void;
+}
+
+const TaskForm: React.FC<TaskFormProps> = (props) => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLFormElement> = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      props.onSubmit(e);
+    }
+  };
+  const handleButtonClick = () => {
+    const syntheticEvent = {
+      target: {
+        value: '',
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    props.onChange(syntheticEvent);
+  };
   return (
     <div className="TasklistFormContainer">
-      <form className="TasklistForm" onSubmit={props.onSubmit}>
-        <div className="align-center flex  flex-row">
+      <form
+        className="TasklistForm"
+        onSubmit={props.onSubmit}
+        onKeyDown={handleKeyDown}
+      >
+        <div className="align-center flex flex-row">
           <input
             className="form-input mb-1 mr-1 w-full rounded"
             type="text"
             placeholder="Add a task..."
             value={props.value}
             onChange={props.onChange}
-            // maxLength="40"
             ref={props.reference}
             required
           />
           <button
             className="clearInput-btn mb-1 rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700"
-            onClick={() => props.onChange({ target: { value: '' } })}
+            onClick={handleButtonClick}
           >
             <TrashIcon className="w-5" />
           </button>
