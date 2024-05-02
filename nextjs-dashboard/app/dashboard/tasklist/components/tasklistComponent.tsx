@@ -1,11 +1,10 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
-import TaskForm from './tasklist-form';
+import TasklistForm from './tasklistForm';
 import Header from './header';
-import Tasklist from './tasklist';
-import ConfirmModal from './confirm-modal';
+import TasklistContainer from './tasklistContainer';
+import ConfirmModal from './confirmModal';
 import {
   CheckBadgeIcon,
   ListBulletIcon,
@@ -19,7 +18,7 @@ interface Task {
   completed: boolean;
 }
 
-const TasklistComp: React.FC = () => {
+const TasklistComponent: React.FC = () => {
   const initialState = (): Task[] => {
     if (typeof window !== 'undefined') {
       return JSON.parse(localStorage.getItem('Tasks') || '[]') || [];
@@ -167,7 +166,7 @@ const TasklistComp: React.FC = () => {
       >
         <div className="TasklistComp_child">
           <Header />
-          <TaskForm
+          <TasklistForm
             onSubmit={handleSubmit}
             value={newTask}
             onChange={handleChange}
@@ -180,7 +179,7 @@ const TasklistComp: React.FC = () => {
               throw new Error('Function not implemented.');
             }}
           />
-          <Tasklist>
+          <TasklistContainer>
             {tasks.length > 0 ? (
               TaskLists
             ) : (
@@ -189,7 +188,7 @@ const TasklistComp: React.FC = () => {
                 <span className="no-task-p">Add tasks above</span>
               </span>
             )}
-          </Tasklist>
+          </TasklistContainer>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center">
@@ -204,4 +203,4 @@ const TasklistComp: React.FC = () => {
   );
 };
 
-export default TasklistComp;
+export default TasklistComponent;

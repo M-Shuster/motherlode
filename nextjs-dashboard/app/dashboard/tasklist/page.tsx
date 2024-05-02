@@ -4,7 +4,7 @@
 // import Table from '@/app/ui/invoices/table';
 import { tajawal } from '@/app/ui/fonts';
 // import { Suspense } from 'react';
-import TasklistComp from './components/tasklistComp';
+import TasklistComponent from './components/tasklistComponent';
 
 export default function Page({
   searchParams,
@@ -21,7 +21,7 @@ export default function Page({
 
   return (
     <div className="flex h-full w-full flex-col items-center">
-      <TasklistComp />
+      <TasklistComponent />
       <div className="mt-5 flex w-full justify-center">
         {/* <Pagination totalPages={totalPages} /> */}
       </div>

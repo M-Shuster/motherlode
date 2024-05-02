@@ -11,7 +11,7 @@ interface TaskFormProps {
   onKeyDown: (event: React.KeyboardEvent<HTMLFormElement>) => void;
 }
 
-const TaskForm: React.FC<TaskFormProps> = (props) => {
+const TasklistForm: React.FC<TaskFormProps> = (props) => {
   const handleKeyDown: React.KeyboardEventHandler<HTMLFormElement> = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -71,4 +71,4 @@ const TaskForm: React.FC<TaskFormProps> = (props) => {
   );
 };
 
-export default TaskForm;
+export default TasklistForm;

@@ -4,7 +4,7 @@ interface TasklistProps {
   children: ReactNode;
 }
 
-const Tasklist: React.FC<TasklistProps> = ({ children }) => {
+const TasklistContainer: React.FC<TasklistProps> = ({ children }) => {
   return (
     <div className="Tasklist-container mt-4">
       <ul className="Tasklist">{children}</ul>
@@ -12,4 +12,4 @@ const Tasklist: React.FC<TasklistProps> = ({ children }) => {
   );
 };
 
-export default Tasklist;
+export default TasklistContainer;
