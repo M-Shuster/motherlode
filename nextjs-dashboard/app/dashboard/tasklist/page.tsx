@@ -2,7 +2,7 @@
 // import Pagination from '@/app/ui/invoices/pagination';
 // import Search from '@/app/ui/search';
 // import Table from '@/app/ui/invoices/table';
-import { tajawal } from '@/app/ui/fonts';
+import { montserrat } from '@/app/ui/fonts';
 // import { Suspense } from 'react';
 import TasklistComponent from './components/tasklistComponent';
 

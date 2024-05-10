@@ -11,6 +11,7 @@ import {
   PencilIcon,
   TrashIcon,
 } from '@heroicons/react/20/solid';
+import { tiltNeon } from '@/app/ui/fonts';
 
 interface Task {
   id: string;
@@ -26,6 +27,7 @@ const TasklistComponent: React.FC = () => {
     return [];
   };
   const [tasks, setTasks] = useState<Task[]>(initialState);
+  const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
   useEffect(() => {
     const initialTasks = initialState();
     setTasks(initialTasks);
@@ -72,6 +74,7 @@ const TasklistComponent: React.FC = () => {
 
   const handleConfirmClear = () => {
     setTasks([]);
+    setCompletedTasks([]);
     setIsModalOpen(false);
     if (inputRef.current) inputRef.current.focus();
   };
@@ -91,6 +94,12 @@ const TasklistComponent: React.FC = () => {
     setTasks((prevState) => prevState.filter((task) => task.id !== id));
   };
 
+  const handleDeleteCompleted = (id: string) => {
+    setCompletedTasks((prevState) =>
+      prevState.filter((task) => task.id !== id),
+    );
+  };
+
   const handleEdit = (id: string) => {
     const item = tasks.find((task) => task.id === id);
     if (item) {
@@ -101,12 +110,33 @@ const TasklistComponent: React.FC = () => {
     }
   };
 
-  const handleCheck = (title: string, id: string) => {
-    const newArr = tasks.slice();
-    const indexArr = newArr.map((arr) => arr.id);
-    const index = indexArr.indexOf(id);
-    newArr.splice(index, 1, { id, title, completed: !newArr[index].completed });
-    setTasks(newArr);
+  const handleUnCheck = (id: string) => {
+    const taskToMove = completedTasks.find((task) => task.id === id);
+    if (taskToMove) {
+      setTasks((prevState) => [
+        ...prevState,
+        { ...taskToMove, completed: false },
+      ]);
+      setCompletedTasks((prevState) =>
+        prevState.filter((task) => task.id !== id),
+      );
+    }
+  };
+
+  const handleCheck = (id: string) => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        const updatedTask = { ...task, completed: !task.completed };
+        if (updatedTask.completed) {
+          setCompletedTasks((prevState) => [...prevState, updatedTask]);
+        } else {
+          handleUnCheck(id);
+        }
+        return updatedTask;
+      }
+      return task;
+    });
+    setTasks(updatedTasks.filter((task) => task.id !== id));
   };
 
   useEffect(() => {
@@ -149,7 +179,34 @@ const TasklistComponent: React.FC = () => {
           <button
             title="Complete"
             className="mr-2 rounded bg-yellow-500 px-4 py-2 font-bold text-white hover:bg-yellow-700"
-            onClick={() => handleCheck(task.title, task.id)}
+            onClick={() => handleCheck(task.id)}
+          >
+            <CheckBadgeIcon className="w-3 md:w-4" />
+          </button>
+        </div>
+      </li>
+    );
+  });
+  const CompletedTaskList = completedTasks.map((task) => {
+    return (
+      <li
+        className="list mb-2 flex w-full flex-row items-center justify-between rounded-lg bg-slate-50 py-2 hover:bg-slate-200"
+        style={liStyle}
+        key={task.id}
+      >
+        <span className="ml-2">{task.title}</span>
+        <div>
+          <button
+            title="Delete"
+            className="mr-1 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            onClick={() => handleDeleteCompleted(task.id)}
+          >
+            <TrashIcon className="w-3 md:w-4" />
+          </button>
+          <button
+            title="Complete"
+            className="mr-2 rounded bg-yellow-500 px-4 py-2 font-bold text-white hover:bg-yellow-700"
+            onClick={() => handleUnCheck(task.id)}
           >
             <CheckBadgeIcon className="w-3 md:w-4" />
           </button>
@@ -181,14 +238,32 @@ const TasklistComponent: React.FC = () => {
           />
           <TasklistContainer>
             {tasks.length > 0 ? (
-              TaskLists
+              <>
+                <h2 className={`${tiltNeon.className} mb-3 text-xl`}>
+                  Incomplete Tasks
+                </h2>
+                {/* <h2 className=''></h2> */}
+                <ul>{TaskLists}</ul>
+              </>
             ) : (
-              <span className="no-task mt-2 flex flex-row">
+              <span
+                className={`${tiltNeon.className}no-task mt-2 flex flex-row `}
+              >
                 <ListBulletIcon className="md:5 mr-1 w-4" />
-                <span className="no-task-p">Add tasks above</span>
+                <span className={`${tiltNeon.className} no-task-p `}>
+                  Add tasks above
+                </span>
               </span>
             )}
           </TasklistContainer>
+          {completedTasks.length > 0 && (
+            <>
+              <h2 className={`${tiltNeon.className} mb-3 text-xl`}>
+                Completed Tasks
+              </h2>
+              <ul>{CompletedTaskList}</ul>
+            </>
+          )}
         </div>
       </div>
       <div className="flex flex-col items-center justify-center">
