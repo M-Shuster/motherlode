@@ -12,8 +12,8 @@ export default function Header() {
         you cross them off.
       </p>
       <p className=" description-alt mb-2">
-        Alternatively, click the generate tasks to automatically generate 5
-        tasks because writing is too much effort.
+        Alternatively, click the generate tasks button to automatically generate
+        a task, because writing is too much effort.
       </p>
     </div>
   );
