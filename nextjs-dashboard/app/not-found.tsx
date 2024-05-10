@@ -18,29 +18,19 @@ export default function NotFoundRoot() {
         >
           I find your lack of page disturbing.
         </h3>
-        <p
-          className={`${pixelifySans.className} text-md text-center text-gray-700 dark:text-gray-300`}
-        >
+        <p className="text-md text-center text-gray-700 dark:text-gray-300">
           You are here because:
         </p>
-        <p
-          className={`${pixelifySans.className} text-md text-center text-gray-700 dark:text-gray-300`}
-        >
+        <p className="text-md text-center text-gray-700 dark:text-gray-300">
           - You have visited an out of date bookmark or link
         </p>
-        <p
-          className={`${pixelifySans.className} text-md text-center text-gray-700 dark:text-gray-300`}
-        >
+        <p className="text-md text-center text-gray-700 dark:text-gray-300">
           -The address has been mistyped
         </p>
-        <p
-          className={`${pixelifySans.className} text-md text-center text-gray-700 dark:text-gray-300`}
-        >
+        <p className="text-md text-center text-gray-700 dark:text-gray-300">
           - Michael has forgotten to code something properly
         </p>
-        <p
-          className={`${pixelifySans.className} text-md text-center text-gray-700 dark:text-gray-300`}
-        >
+        <p className="text-md text-center text-gray-700 dark:text-gray-300">
           - Rebel scum
         </p>
         <Link

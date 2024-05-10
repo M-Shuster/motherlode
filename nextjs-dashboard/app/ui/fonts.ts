@@ -1,21 +1,19 @@
 import {
-  Inter,
   Lusitana,
-  Tajawal,
+  Montserrat,
   Great_Vibes,
   Pixelify_Sans,
   Tilt_Neon,
   WindSong,
 } from 'next/font/google';
 
-export const inter = Inter({ subsets: ['latin'] });
 // nextJS tutorial font
 export const lusitana = Lusitana({
   subsets: ['latin'],
   weight: ['400', '700'],
 });
 // body font
-export const tajawal = Tajawal({
+export const montserrat = Montserrat({
   subsets: ['latin'],
   weight: ['400', '700'],
 });
