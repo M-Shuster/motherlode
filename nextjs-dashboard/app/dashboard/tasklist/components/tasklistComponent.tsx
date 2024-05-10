@@ -5,6 +5,7 @@ import TasklistForm from './tasklistForm';
 import Header from './header';
 import TasklistContainer from './tasklistContainer';
 import ConfirmModal from './confirmModal';
+import ErrorModal from './errorModal';
 import {
   CheckBadgeIcon,
   ListBulletIcon,
@@ -18,6 +19,33 @@ interface Task {
   title: string;
   completed: boolean;
 }
+
+const randomRunescapeTasks: string[] = [
+  'cook a shark',
+  'chop some magic logs',
+  'hunt spotted kebbits',
+  'complete a quest',
+  'craft some nature runes',
+  'mine some adamant ore',
+  'crush a cyclops',
+  'slash a hellhound',
+  'complete a lap of the Seers village agility course',
+  'plant a mahogany tree',
+  'catch an anglerfish',
+  'smith a rune longsword',
+  'train hitpoints',
+  'fletch some bolt tips',
+  'craft a prayer potion',
+  'bury some blessed dragon bones',
+  'defend against a troll',
+  'range an ice wyvern',
+  'cast tan leather',
+  'construct an oak cellar door',
+  'slay abyssal demons',
+  'craft an amulet of glory',
+  'pickpocket an elf',
+  'light some redwood logs',
+];
 
 const TasklistComponent: React.FC = () => {
   const initialState = (): Task[] => {
@@ -36,6 +64,7 @@ const TasklistComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editId, setEditId] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -139,6 +168,38 @@ const TasklistComponent: React.FC = () => {
     setTasks(updatedTasks.filter((task) => task.id !== id));
   };
 
+  const handleGenerateTask = () => {
+    let randomIndex = Math.floor(Math.random() * randomRunescapeTasks.length);
+    let randomTask = randomRunescapeTasks[randomIndex];
+    let tries = 0;
+    const maxTries = randomRunescapeTasks.length;
+
+    // Keep generating a new task until a unique one is found or maximum tries is reached
+    while (
+      tasks.some((task) => task.title === randomTask) &&
+      tries < maxTries
+    ) {
+      randomIndex = Math.floor(Math.random() * randomRunescapeTasks.length);
+      randomTask = randomRunescapeTasks[randomIndex];
+      tries++;
+    }
+
+    if (tries === maxTries) {
+      setIsErrorModalOpen(true);
+      return;
+    }
+
+    const newTaskArr = [
+      ...tasks,
+      { id: uuidv4(), title: randomTask, completed: false },
+    ];
+    setTasks(newTaskArr);
+  };
+
+  const handleErrorModalClose = () => {
+    setIsErrorModalOpen(false);
+  };
+
   useEffect(() => {
     localStorage.setItem('Tasks', JSON.stringify(tasks));
   }, [tasks]);
@@ -235,6 +296,7 @@ const TasklistComponent: React.FC = () => {
             ): void {
               throw new Error('Function not implemented.');
             }}
+            onGenerateTask={handleGenerateTask}
           />
           <TasklistContainer>
             {tasks.length > 0 ? (
@@ -271,6 +333,13 @@ const TasklistComponent: React.FC = () => {
           isOpen={isModalOpen}
           onClose={handleCancelClear}
           onConfirm={handleConfirmClear}
+          modalClassName={isModalOpen ? 'modal-open' : ''}
+        />
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <ErrorModal
+          isOpen={isErrorModalOpen}
+          onClose={handleErrorModalClose}
           modalClassName={isModalOpen ? 'modal-open' : ''}
         />
       </div>

@@ -9,6 +9,7 @@ interface TaskFormProps {
   onClick: () => void;
   isEditing: boolean;
   onKeyDown: (event: React.KeyboardEvent<HTMLFormElement>) => void;
+  onGenerateTask: () => void;
 }
 
 const TasklistForm: React.FC<TaskFormProps> = (props) => {
@@ -27,6 +28,11 @@ const TasklistForm: React.FC<TaskFormProps> = (props) => {
 
     props.onChange(syntheticEvent);
   };
+
+  const handleGenerateTask = () => {
+    props.onGenerateTask();
+  };
+
   return (
     <div className="TasklistFormContainer">
       <form
@@ -51,12 +57,19 @@ const TasklistForm: React.FC<TaskFormProps> = (props) => {
             <TrashIcon className="w-5" />
           </button>
         </div>
-        <div className="btn-container mt-2">
+        <div className="btn-container mt-2 flex flex-row justify-between">
           <button
             className="mr-1 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
             type="submit"
           >
             {!props.isEditing ? 'Add a task' : 'Edit Task'}
+          </button>
+          <button
+            className="mr-1 rounded bg-blue-700 px-4 py-2 font-bold text-white hover:bg-blue-800"
+            onClick={handleGenerateTask}
+            type="button"
+          >
+            Generate a task
           </button>
           <button
             className="rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700"
