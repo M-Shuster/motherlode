@@ -31,7 +31,7 @@ const ErrorModal: React.FC<ModalProps> = ({
             </button>
           </div>
           <div className="position: relative bottom-4">
-            <p>All tasks already exist in the list.</p>
+            <p>All random tasks already exist in the list.</p>
             <p>Please complete some before generating more.</p>
           </div>
           <button

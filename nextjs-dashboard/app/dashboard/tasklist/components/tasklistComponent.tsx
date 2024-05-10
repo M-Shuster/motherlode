@@ -7,6 +7,8 @@ import TasklistContainer from './tasklistContainer';
 import ConfirmModal from './confirmModal';
 import ErrorModal from './errorModal';
 import {
+  BarsArrowDownIcon,
+  BarsArrowUpIcon,
   CheckBadgeIcon,
   ListBulletIcon,
   PencilIcon,
@@ -65,6 +67,8 @@ const TasklistComponent: React.FC = () => {
   const [editId, setEditId] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
+  const [isCompletedTasksExpanded, setIsCompletedTasksExpanded] =
+    useState<boolean>(true);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -200,6 +204,10 @@ const TasklistComponent: React.FC = () => {
     setIsErrorModalOpen(false);
   };
 
+  const handleToggleCompletedTasks = () => {
+    setIsCompletedTasksExpanded(!isCompletedTasksExpanded);
+  };
+
   useEffect(() => {
     localStorage.setItem('Tasks', JSON.stringify(tasks));
   }, [tasks]);
@@ -280,7 +288,7 @@ const TasklistComponent: React.FC = () => {
       <div
         className={`TasklistComp ${
           isModalOpen ? 'modal-open' : ''
-        }w-4/6 rounded-xl bg-slate-100 p-4 shadow-md`}
+        }w-full rounded-xl bg-slate-100 p-4 shadow-md md:w-4/6`}
       >
         <div className="TasklistComp_child">
           <Header />
@@ -304,7 +312,6 @@ const TasklistComponent: React.FC = () => {
                 <h2 className={`${tiltNeon.className} mb-3 text-xl`}>
                   Incomplete Tasks
                 </h2>
-                {/* <h2 className=''></h2> */}
                 <ul>{TaskLists}</ul>
               </>
             ) : (
@@ -319,12 +326,24 @@ const TasklistComponent: React.FC = () => {
             )}
           </TasklistContainer>
           {completedTasks.length > 0 && (
-            <>
-              <h2 className={`${tiltNeon.className} mb-3 text-xl`}>
-                Completed Tasks
-              </h2>
-              <ul>{CompletedTaskList}</ul>
-            </>
+            <div>
+              <div className="flex flex-row justify-between">
+                <h2 className={`${tiltNeon.className} mb-3 text-xl`}>
+                  Completed Tasks
+                </h2>
+                <button
+                  onClick={handleToggleCompletedTasks}
+                  className="flex h-8 w-8 items-center justify-center rounded transition duration-300 ease-out hover:bg-slate-200 hover:ease-in"
+                >
+                  {isCompletedTasksExpanded ? (
+                    <BarsArrowUpIcon className="h-4 w-4" />
+                  ) : (
+                    <BarsArrowDownIcon className="h-4 w-4 " />
+                  )}
+                </button>
+              </div>
+              {isCompletedTasksExpanded && <ul>{CompletedTaskList}</ul>}
+            </div>
           )}
         </div>
       </div>
