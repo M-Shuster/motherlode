@@ -222,7 +222,7 @@ const TasklistComponent: React.FC = () => {
         key={task.id}
       >
         <span className="ml-2">{task.title}</span>
-        <div>
+        <div className="min-w-[160px]">
           <button
             title="Delete"
             className="mr-1 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
@@ -256,7 +256,7 @@ const TasklistComponent: React.FC = () => {
         key={task.id}
       >
         <span className="ml-2">{task.title}</span>
-        <div>
+        <div className="flex min-w-[160px] justify-end">
           <button
             title="Delete"
             className="mr-1 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
