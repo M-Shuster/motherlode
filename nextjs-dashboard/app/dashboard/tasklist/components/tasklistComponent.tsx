@@ -50,17 +50,27 @@ const randomRunescapeTasks: string[] = [
 ];
 
 const TasklistComponent: React.FC = () => {
-  const initialState = (): Task[] => {
+  const initialTaskState = (): Task[] => {
     if (typeof window !== 'undefined') {
       return JSON.parse(localStorage.getItem('Tasks') || '[]') || [];
     }
     return [];
   };
-  const [tasks, setTasks] = useState<Task[]>(initialState);
-  const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
+  const initialCompletedTaskState = (): Task[] => {
+    if (typeof window !== 'undefined') {
+      return JSON.parse(localStorage.getItem('CompletedTasks') || '[]') || [];
+    }
+    return [];
+  };
+  const [tasks, setTasks] = useState<Task[]>(initialTaskState);
+  const [completedTasks, setCompletedTasks] = useState<Task[]>(
+    initialCompletedTaskState,
+  );
   useEffect(() => {
-    const initialTasks = initialState();
+    const initialTasks = initialTaskState();
+    const initialCompleted = initialCompletedTaskState();
     setTasks(initialTasks);
+    setCompletedTasks(initialCompleted);
   }, []);
   const [newTask, setNewTask] = useState<string>('');
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -211,6 +221,10 @@ const TasklistComponent: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('Tasks', JSON.stringify(tasks));
   }, [tasks]);
+
+  useEffect(() => {
+    localStorage.setItem('CompletedTasks', JSON.stringify(completedTasks));
+  }, [completedTasks]);
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
