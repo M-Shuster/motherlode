@@ -59,7 +59,6 @@ const NoteForm: React.FC<NoteFormProps> = (props) => {
           >
             {!props.isEditing ? 'Take note' : 'Edit note'}
           </button>
-
           <button
             className="rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700"
             type="button"

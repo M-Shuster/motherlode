@@ -7,7 +7,7 @@ export default function AcmeLogo() {
       className={`${tiltNeon.className} flex flex-row items-center leading-none text-white`}
     >
       <BugAntIcon className="h-12 w-12 rotate-[15deg]" />
-      <p className="w-auto text-[40px]">MDW inc.</p>
+      <p className="w-auto text-[36px]">MDW inc.</p>
     </div>
   );
 }

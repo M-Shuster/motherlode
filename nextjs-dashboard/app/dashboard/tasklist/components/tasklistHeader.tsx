@@ -1,9 +1,9 @@
 import { tiltNeon } from '@/app/ui/fonts';
 import React from 'react';
 
-export default function Header() {
+const TasklistHeader: React.FC = () => {
   return (
-    <div className="Header">
+    <div className="tasklistHeader">
       <h1 className={`${tiltNeon.className} title mb-1 text-2xl font-bold`}>
         Task List
       </h1>
@@ -17,4 +17,6 @@ export default function Header() {
       </p>
     </div>
   );
-}
+};
+
+export default TasklistHeader;

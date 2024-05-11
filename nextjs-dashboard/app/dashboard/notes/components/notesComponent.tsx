@@ -3,16 +3,14 @@ import { v4 as uuidv4 } from 'uuid';
 import NoteForm from './noteForm';
 import NotesContainer from './notesContainer';
 import { tiltNeon } from '@/app/ui/fonts';
-import {
-  ListBulletIcon,
-  PencilIcon,
-  TrashIcon,
-} from '@heroicons/react/20/solid';
+import { ListBulletIcon } from '@heroicons/react/20/solid';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import NotesHeader from './notesHeader';
+import NotesConfirmModal from './notesConfirmModal';
 
 interface Note {
   id: string;
   title: string;
-  visible: boolean;
 }
 
 const NotesComponent: React.FC = () => {
@@ -46,10 +44,7 @@ const NotesComponent: React.FC = () => {
     e.preventDefault();
     if (newNote === '') return;
     if (!isEditing) {
-      const newNoteArr = [
-        ...notes,
-        { id: uuidv4(), title: newNote, visible: true },
-      ];
+      const newNoteArr = [...notes, { id: uuidv4(), title: newNote }];
       setNotes(newNoteArr);
       setNewNote('');
       if (inputRef.current) inputRef.current.focus();
@@ -57,7 +52,7 @@ const NotesComponent: React.FC = () => {
       const newArr = notes.slice();
       const indexArr = newArr.map((arr) => arr.id);
       const index = indexArr.indexOf(editId);
-      newArr.splice(index, 1, { id: editId, title: newNote, visible: true });
+      newArr.splice(index, 1, { id: editId, title: newNote });
       setNotes(newArr);
       setNewNote('');
       setEditId('');
@@ -81,7 +76,10 @@ const NotesComponent: React.FC = () => {
   };
 
   const handleClear = () => {
-    setIsModalOpen(true);
+    if (notes.length > 0) {
+      setIsModalOpen(true);
+    }
+    return;
   };
 
   const handleCancel = () => {
@@ -91,36 +89,52 @@ const NotesComponent: React.FC = () => {
     if (inputRef.current) inputRef.current.focus();
   };
 
+  const handleCancelClear = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirmClear = () => {
+    setNotes([]);
+    setIsModalOpen(false);
+    if (inputRef.current) inputRef.current.focus();
+  };
+
+  useEffect(() => {
+    localStorage.setItem('Notes', JSON.stringify(notes));
+  }, [notes]);
+
+  // created so that the className didn't become unwieldy
   const noteStyle = {
     fontWeight: '400',
     fontStyle: 'italic',
-    display: 'inline-block',
-    minHeight: '150px',
-    minWidth: '150px',
+    minHeight: '140px',
+    minWidth: '140px',
+    padding: '10px',
+    display: 'flex',
   };
 
   const NoteList = notes.map((note) => {
     return (
       <li
-        className="list mb-2 flex  w-full flex-row items-center justify-between rounded-lg bg-slate-50 hover:bg-slate-200"
-        style={note.visible ? noteStyle : { display: 'none' }}
+        className="list w-full flex-col rounded-lg bg-slate-50"
+        style={noteStyle}
         key={note.id}
       >
-        <span className="ml-2">{note.title}</span>
-        <div className="min-w-[160px]">
-          <button
-            title="Delete"
-            className="mr-1 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            onClick={() => handleDelete(note.id)}
-          >
-            <TrashIcon className="w-3 md:w-4" />
-          </button>
+        <span className="ml-1">{note.title}</span>
+        <div className="mt-auto flex justify-end">
           <button
             title="Edit"
-            className="mr-1 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+            className="mr-1 rounded-2xl p-2 font-bold text-slate-500  hover:bg-slate-300 hover:text-slate-800"
             onClick={() => handleEdit(note.id)}
           >
             <PencilIcon className="w-3 md:w-4" />
+          </button>
+          <button
+            title="Delete"
+            className="mr-1 rounded-2xl p-2 font-bold text-slate-500 hover:bg-slate-300 hover:text-slate-800"
+            onClick={() => handleDelete(note.id)}
+          >
+            <TrashIcon className="w-3 md:w-4" />
           </button>
         </div>
       </li>
@@ -129,9 +143,10 @@ const NotesComponent: React.FC = () => {
 
   return (
     <>
-      <div className={`NoteComp ${isModalOpen ? 'modal-open' : ''}w-full`}>
+      <div className={`NoteComp ${isModalOpen ? 'modal-open' : ''} w-full`}>
         <div>
           <div className="NotesComp_child">
+            <NotesHeader />
             <NoteForm
               onSubmit={handleSubmit}
               value={newNote}
@@ -157,7 +172,7 @@ const NotesComponent: React.FC = () => {
                 </>
               ) : (
                 <span
-                  className={`${tiltNeon.className}no-notes mt-2 flex flex-row `}
+                  className={`${tiltNeon.className}no-notes flex flex-row `}
                 >
                   <ListBulletIcon className="md:5 mr-1 w-4" />
                   <span className={`${tiltNeon.className} no-task-p `}>
@@ -169,6 +184,16 @@ const NotesComponent: React.FC = () => {
           </div>
         </div>
       </div>
+      {notes.length > 0 && (
+        <div className="flex flex-col items-center justify-center">
+          <NotesConfirmModal
+            isOpen={isModalOpen}
+            onClose={handleCancelClear}
+            onConfirm={handleConfirmClear}
+            modalClassName={isModalOpen ? 'modal-open' : ''}
+          />
+        </div>
+      )}
     </>
   );
 };
