@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  UserGroupIcon,
+  LightBulbIcon,
   HomeIcon,
   DocumentDuplicateIcon,
   ListBulletIcon,
@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 // Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
+// Depending on the size of the application, this could be stored in a database.
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
   {
@@ -19,7 +19,7 @@ const links = [
     href: '/dashboard/invoices',
     icon: DocumentDuplicateIcon,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  { name: 'Notes', href: '/dashboard/notes', icon: LightBulbIcon },
   { name: 'Task list', href: '/dashboard/tasklist', icon: ListBulletIcon },
 ];
 
