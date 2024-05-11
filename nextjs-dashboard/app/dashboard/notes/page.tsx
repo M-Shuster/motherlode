@@ -1,9 +1,11 @@
-import { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Notes',
-};
+import NotesComponent from './components/notesComponent';
 
 export default function Page() {
-  return <p>Notes Page</p>;
+  return (
+    <div className="flex h-full w-full flex-col items-center">
+      <NotesComponent />
+    </div>
+  );
 }
