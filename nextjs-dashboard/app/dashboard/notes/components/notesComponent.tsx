@@ -4,7 +4,7 @@ import NoteForm from './noteForm';
 import NotesContainer from './notesContainer';
 import { tiltNeon } from '@/app/ui/fonts';
 import { ListBulletIcon } from '@heroicons/react/20/solid';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { TagIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import NotesHeader from './notesHeader';
 import NotesConfirmModal from './notesConfirmModal';
 
@@ -32,7 +32,10 @@ const NotesComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editId, setEditId] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isColourMenuOpen, setIsColourMenuOpen] = useState(false);
 
+  const tagButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +63,25 @@ const NotesComponent: React.FC = () => {
       if (inputRef.current) inputRef.current.focus();
     }
   };
+
+  const handleTag = (id: string) => {
+    if (!tagButtonRef.current) return;
+    setIsColourMenuOpen(!isColourMenuOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsColourMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleEdit = (id: string) => {
     const item = notes.find((note) => note.id === id);
@@ -122,6 +144,38 @@ const NotesComponent: React.FC = () => {
       >
         <span className="ml-1">{note.title}</span>
         <div className="mt-auto flex justify-end">
+          <button
+            title="Tag"
+            className="mr-1 rounded-2xl p-2 font-bold text-slate-500  hover:bg-slate-300 hover:text-slate-800"
+            onClick={() => handleTag(note.id)}
+            ref={tagButtonRef}
+          >
+            <TagIcon className="w-3 md:w-4" />
+          </button>
+          {isColourMenuOpen && tagButtonRef.current && (
+            <div
+              ref={menuRef}
+              className="absolute z-10 rounded border border-gray-200 bg-white shadow-lg"
+              style={{
+                top:
+                  tagButtonRef.current.offsetTop +
+                  tagButtonRef.current.offsetHeight,
+                minWidth: '100px',
+              }}
+            >
+              <ul className="py-1">
+                <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
+                  Red
+                </li>
+                <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
+                  Blue
+                </li>
+                <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
+                  Green
+                </li>
+              </ul>
+            </div>
+          )}
           <button
             title="Edit"
             className="mr-1 rounded-2xl p-2 font-bold text-slate-500  hover:bg-slate-300 hover:text-slate-800"
