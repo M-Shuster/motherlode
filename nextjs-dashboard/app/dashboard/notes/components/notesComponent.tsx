@@ -25,80 +25,132 @@ const colorPresets: { [key: string]: string } = {
 };
 
 const NotesComponent: React.FC = () => {
-  const initialNoteState = (): Note[] => {
-    if (typeof window !== 'undefined') {
-      return JSON.parse(localStorage.getItem('Notes') || '[]') || [];
-    }
-    return [];
+  const initialNotes = JSON.parse(localStorage.getItem('Notes') || '[]') || [];
+  const initialColors = initialNotes.reduce(
+    (acc: { [key: string]: string }, note: Note) => {
+      acc[note.id] = note.color;
+      return acc;
+    },
+    {},
+  );
+
+  const [state, setState] = useState({
+    notes: initialNotes,
+    selectedNoteColor: initialColors,
+    newNote: '',
+    isEditing: false,
+    editId: '',
+    isModalOpen: false,
+    openColorMenus: {},
+  });
+
+  const tagButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const inputRef = useRef<HTMLInputElement>(null);
+  const shouldCloseMenuRef = useRef<boolean>(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState((prevState) => ({
+      ...prevState,
+      newNote: e.target.value,
+    }));
   };
 
-  const [notes, setNotes] = useState<Note[]>(initialNoteState);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (state.newNote.trim() === '') return;
+
+    let newNoteArr: Note[];
+    if (!state.isEditing) {
+      newNoteArr = [
+        ...state.notes,
+        {
+          id: uuidv4(),
+          title: state.newNote,
+          color: '',
+        },
+      ];
+    } else {
+      newNoteArr = state.notes.map((note: Note) =>
+        note.id === state.editId ? { ...note, title: state.newNote } : note,
+      );
+    }
+
+    setState((prevState) => ({
+      ...prevState,
+      notes: newNoteArr,
+      newNote: '',
+      isEditing: false,
+      editId: '',
+    }));
+  };
+
+  const handleEdit = (id: string) => {
+    const item = state.notes.find((note: Note) => note.id === id);
+    if (item) {
+      setState((prevState) => ({
+        ...prevState,
+        newNote: item.title,
+        isEditing: true,
+        editId: id,
+      }));
+    }
+  };
+
+  const handleDelete = (id: string) => {
+    setState((prevState) => ({
+      ...prevState,
+      notes: prevState.notes.filter((note: Note) => note.id !== id),
+    }));
+  };
+
+  const handleClear = () => {
+    if (state.notes.length > 0) {
+      setState((prevState) => ({
+        ...prevState,
+        isModalOpen: true,
+      }));
+    }
+  };
+
+  const handleCancel = () => {
+    setState((prevState) => ({
+      ...prevState,
+      isEditing: false,
+      newNote: '',
+      editId: '',
+    }));
+  };
+
+  const handleCancelClear = () => {
+    setState((prevState) => ({
+      ...prevState,
+      isModalOpen: false,
+    }));
+  };
+
+  const handleConfirmClear = () => {
+    setState((prevState) => ({
+      ...prevState,
+      notes: [],
+      isModalOpen: false,
+    }));
+  };
+
+  const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNoteColor, setSelectedNoteColor] = useState<{
     [key: string]: string;
   }>();
 
   useEffect(() => {
-    const initialNotes = initialNoteState();
+    const initialNotes =
+      JSON.parse(localStorage.getItem('Notes') || '[]') || [];
     setNotes(initialNotes);
   }, []);
 
-  const [newNote, setNewNote] = useState<string>('');
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editId, setEditId] = useState<string>('');
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openColorMenus, setOpenColorMenus] = useState<{
     [key: string]: boolean;
   }>({});
-  const [newColor, setNewColor] = useState<string>('');
-
-  const tagButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
-  const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setNewNote(value);
-    setNewColor(value);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (newNote === '') return;
-    let newNoteArr: Note[] = [];
-    if (!isEditing) {
-      newNoteArr = [
-        ...notes,
-        {
-          id: uuidv4(),
-          title: newNote,
-          color: newColor,
-        },
-      ];
-      setNotes(newNoteArr);
-      setNewNote('');
-      setNewColor('');
-      if (inputRef.current) inputRef.current.focus();
-    } else {
-      const newArr = notes.slice();
-      const indexArr = newArr.map((arr) => arr.id);
-      const index = indexArr.indexOf(editId);
-      newArr.splice(index, 1, {
-        id: editId,
-        title: newNote,
-        color: newColor,
-      });
-      newNoteArr = newArr;
-      setNotes(newArr);
-      setNewNote('');
-      setNewColor('');
-      setEditId('');
-      setIsEditing(false);
-      if (inputRef.current) inputRef.current.focus();
-    }
-    localStorage.setItem('Notes', JSON.stringify(newNoteArr));
-  };
-
-  const shouldCloseMenuRef = useRef<boolean>(false);
 
   const handleTagOpen = (id: string) => {
     setOpenColorMenus((prev) => ({
@@ -132,46 +184,7 @@ const NotesComponent: React.FC = () => {
     shouldCloseMenuRef.current = false;
   };
 
-  const handleEdit = (id: string) => {
-    const item = notes.find((note) => note.id === id);
-    if (item) {
-      setNewNote(item.title);
-      setIsEditing(true);
-      setEditId(item.id);
-      if (inputRef.current) inputRef.current.focus();
-    }
-  };
-
-  const handleDelete = (id: string) => {
-    setNotes((prevState) => prevState.filter((note) => note.id !== id));
-  };
-
-  const handleClear = () => {
-    if (notes.length > 0) {
-      setIsModalOpen(true);
-    }
-    return;
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    setNewNote('');
-    setEditId('');
-    if (inputRef.current) inputRef.current.focus();
-  };
-
-  const handleCancelClear = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleConfirmClear = () => {
-    setNotes([]);
-    setIsModalOpen(false);
-    if (inputRef.current) inputRef.current.focus();
-  };
-
   const handleColorClick = (id: string, color: string) => {
-    console.log(`Colour ${color} has been clicked`);
     setSelectedNoteColor((prev) => ({
       ...prev,
       [id]: color,
@@ -190,14 +203,6 @@ const NotesComponent: React.FC = () => {
     setSelectedNoteColor(initialColors);
   }, [notes]);
 
-  useEffect(() => {
-    localStorage.setItem('Notes', JSON.stringify(notes));
-    localStorage.setItem(
-      'SelectedNoteColor',
-      JSON.stringify(selectedNoteColor),
-    );
-  }, [notes, selectedNoteColor]);
-
   // created so that the className didn't become unwieldy
   const noteStyle = {
     fontWeight: '400',
@@ -208,7 +213,7 @@ const NotesComponent: React.FC = () => {
     display: 'flex',
   };
 
-  const NoteList = notes.map((note) => {
+  const NoteList = state.notes.map((note: Note) => {
     const storedColor = JSON.parse(
       localStorage.getItem(`NoteColor_${note.id}`) || '""',
     );
@@ -288,18 +293,28 @@ const NotesComponent: React.FC = () => {
     );
   });
 
+  useEffect(() => {
+    localStorage.setItem('Notes', JSON.stringify(state.notes));
+    localStorage.setItem(
+      'SelectedNoteColor',
+      JSON.stringify(state.selectedNoteColor),
+    );
+  }, [state.notes, state.selectedNoteColor]);
+
   return (
     <>
-      <div className={`NoteComp ${isModalOpen ? 'modal-open' : ''} w-full`}>
+      <div
+        className={`NoteComp ${state.isModalOpen ? 'modal-open' : ''} w-full`}
+      >
         <div>
           <div className="NotesComp_child">
             <NotesHeader />
             <NoteForm
               onSubmit={handleSubmit}
-              value={newNote}
+              value={state.newNote}
               onChange={handleChange}
-              onClick={!isEditing ? handleClear : handleCancel}
-              isEditing={isEditing}
+              onClick={!state.isEditing ? handleClear : handleCancel}
+              isEditing={state.isEditing}
               reference={inputRef}
               onKeyDown={function (
                 event: React.KeyboardEvent<HTMLFormElement>,
@@ -334,10 +349,10 @@ const NotesComponent: React.FC = () => {
       {notes.length > 0 && (
         <div className="flex flex-col items-center justify-center">
           <NotesConfirmModal
-            isOpen={isModalOpen}
+            isOpen={state.isModalOpen}
             onClose={handleCancelClear}
             onConfirm={handleConfirmClear}
-            modalClassName={isModalOpen ? 'modal-open' : ''}
+            modalClassName={state.isModalOpen ? 'modal-open' : ''}
           />
         </div>
       )}
