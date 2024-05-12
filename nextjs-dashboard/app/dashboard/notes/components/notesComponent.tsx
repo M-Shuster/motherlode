@@ -32,10 +32,12 @@ const NotesComponent: React.FC = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editId, setEditId] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isColourMenuOpen, setIsColourMenuOpen] = useState(false);
+  const [openColorMenus, setOpenColorMenus] = useState<{
+    [key: string]: boolean;
+  }>({});
 
-  const tagButtonRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const tagButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,24 +66,39 @@ const NotesComponent: React.FC = () => {
     }
   };
 
-  const handleTag = (id: string) => {
-    if (!tagButtonRef.current) return;
-    setIsColourMenuOpen(!isColourMenuOpen);
+  const shouldCloseMenuRef = useRef<boolean>(false);
+
+  const handleTagOpen = (id: string) => {
+    setOpenColorMenus((prev) => ({
+      ...prev,
+      [id]: true,
+    }));
+    shouldCloseMenuRef.current = true;
   };
 
-  useEffect(() => {
+  const handleTagClose = (id: string) => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsColourMenuOpen(false);
+      if (
+        menuRefs.current[id] &&
+        !menuRefs.current[id]?.contains(event.target as Node)
+      ) {
+        setOpenColorMenus((prev) => ({
+          ...prev,
+          [id]: false,
+        }));
+        shouldCloseMenuRef.current = false;
+        document.removeEventListener('mousedown', handleClickOutside);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+    setOpenColorMenus((prev) => ({
+      ...prev,
+      [id]: false,
+    }));
+    shouldCloseMenuRef.current = false;
+  };
 
   const handleEdit = (id: string) => {
     const item = notes.find((note) => note.id === id);
@@ -147,31 +164,55 @@ const NotesComponent: React.FC = () => {
           <button
             title="Tag"
             className="mr-1 rounded-2xl p-2 font-bold text-slate-500  hover:bg-slate-300 hover:text-slate-800"
-            onClick={() => handleTag(note.id)}
-            ref={tagButtonRef}
+            onClick={() =>
+              openColorMenus[note.id]
+                ? handleTagClose(note.id)
+                : handleTagOpen(note.id)
+            }
+            ref={(el) => (tagButtonRefs.current[note.id] = el)}
           >
             <TagIcon className="w-3 md:w-4" />
           </button>
-          {isColourMenuOpen && tagButtonRef.current && (
+          {openColorMenus[note.id] && tagButtonRefs.current[note.id] && (
             <div
-              ref={menuRef}
+              ref={(el) => (menuRefs.current[note.id] = el)}
               className="absolute z-10 rounded border border-gray-200 bg-white shadow-lg"
               style={{
                 top:
-                  tagButtonRef.current.offsetTop +
-                  tagButtonRef.current.offsetHeight,
+                  (tagButtonRefs.current[note.id]?.offsetTop ?? 0) +
+                  (tagButtonRefs.current[note.id]?.offsetHeight ?? 0),
+
                 minWidth: '100px',
               }}
             >
               <ul className="py-1">
-                <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
-                  Red
+                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
+                  <div className="mr-2 h-4 w-4  rounded-2xl bg-red-500"></div>
+                  <span>Red</span>
                 </li>
-                <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
-                  Blue
+                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
+                  <div className="mr-2 h-4 w-4  rounded-2xl bg-orange-500"></div>
+                  <span>Orange</span>
                 </li>
-                <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
-                  Green
+                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
+                  <div className="mr-2 h-4 w-4  rounded-2xl bg-yellow-500"></div>
+                  <span>Yellow</span>
+                </li>
+                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
+                  <div className="mr-2 h-4 w-4  rounded-2xl bg-green-500"></div>
+                  <span>Green</span>
+                </li>
+                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
+                  <div className="mr-2 h-4 w-4  rounded-2xl bg-blue-500"></div>
+                  <span>Blue</span>
+                </li>
+                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
+                  <div className="mr-2 h-4 w-4  rounded-2xl bg-indigo-500"></div>
+                  <span>Indigo</span>
+                </li>
+                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
+                  <div className="mr-2 h-4 w-4  rounded-2xl bg-violet-500"></div>
+                  <span>Violet</span>
                 </li>
               </ul>
             </div>
