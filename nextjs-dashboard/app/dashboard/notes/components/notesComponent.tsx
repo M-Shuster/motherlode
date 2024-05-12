@@ -11,7 +11,18 @@ import NotesConfirmModal from './notesConfirmModal';
 interface Note {
   id: string;
   title: string;
+  color: string;
 }
+
+const colorPresets: { [key: string]: string } = {
+  Red: 'bg-red-500',
+  Orange: 'bg-orange-500',
+  Yellow: 'bg-yellow-500',
+  Green: 'bg-green-500',
+  Blue: 'bg-blue-500',
+  Indigo: 'bg-indigo-500',
+  Violet: 'bg-violet-500',
+};
 
 const NotesComponent: React.FC = () => {
   const initialNoteState = (): Note[] => {
@@ -22,6 +33,9 @@ const NotesComponent: React.FC = () => {
   };
 
   const [notes, setNotes] = useState<Note[]>(initialNoteState);
+  const [selectedNoteColor, setSelectedNoteColor] = useState<{
+    [key: string]: string;
+  }>();
 
   useEffect(() => {
     const initialNotes = initialNoteState();
@@ -35,6 +49,7 @@ const NotesComponent: React.FC = () => {
   const [openColorMenus, setOpenColorMenus] = useState<{
     [key: string]: boolean;
   }>({});
+  const [newColor, setNewColor] = useState<string>('');
 
   const tagButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -43,27 +58,44 @@ const NotesComponent: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setNewNote(value);
+    setNewColor(value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newNote === '') return;
+    let newNoteArr: Note[] = [];
     if (!isEditing) {
-      const newNoteArr = [...notes, { id: uuidv4(), title: newNote }];
+      newNoteArr = [
+        ...notes,
+        {
+          id: uuidv4(),
+          title: newNote,
+          color: newColor,
+        },
+      ];
       setNotes(newNoteArr);
       setNewNote('');
+      setNewColor('');
       if (inputRef.current) inputRef.current.focus();
     } else {
       const newArr = notes.slice();
       const indexArr = newArr.map((arr) => arr.id);
       const index = indexArr.indexOf(editId);
-      newArr.splice(index, 1, { id: editId, title: newNote });
+      newArr.splice(index, 1, {
+        id: editId,
+        title: newNote,
+        color: newColor,
+      });
+      newNoteArr = newArr;
       setNotes(newArr);
       setNewNote('');
+      setNewColor('');
       setEditId('');
       setIsEditing(false);
       if (inputRef.current) inputRef.current.focus();
     }
+    localStorage.setItem('Notes', JSON.stringify(newNoteArr));
   };
 
   const shouldCloseMenuRef = useRef<boolean>(false);
@@ -138,9 +170,33 @@ const NotesComponent: React.FC = () => {
     if (inputRef.current) inputRef.current.focus();
   };
 
+  const handleColorClick = (id: string, color: string) => {
+    console.log(`Colour ${color} has been clicked`);
+    setSelectedNoteColor((prev) => ({
+      ...prev,
+      [id]: color,
+    }));
+    handleTagClose(id);
+  };
+
+  useEffect(() => {
+    const initialColors = notes.reduce(
+      (acc, note) => {
+        acc[note.id] = note.color;
+        return acc;
+      },
+      {} as { [key: string]: string },
+    );
+    setSelectedNoteColor(initialColors);
+  }, [notes]);
+
   useEffect(() => {
     localStorage.setItem('Notes', JSON.stringify(notes));
-  }, [notes]);
+    localStorage.setItem(
+      'SelectedNoteColor',
+      JSON.stringify(selectedNoteColor),
+    );
+  }, [notes, selectedNoteColor]);
 
   // created so that the className didn't become unwieldy
   const noteStyle = {
@@ -153,9 +209,13 @@ const NotesComponent: React.FC = () => {
   };
 
   const NoteList = notes.map((note) => {
+    const storedColor = JSON.parse(
+      localStorage.getItem(`NoteColor_${note.id}`) || '""',
+    );
+    const noteColor = storedColor || 'bg-slate-50';
     return (
       <li
-        className="list w-full flex-col rounded-lg bg-slate-50"
+        className={`list w-full flex-col rounded-lg ${noteColor}`}
         style={noteStyle}
         key={note.id}
       >
@@ -163,7 +223,7 @@ const NotesComponent: React.FC = () => {
         <div className="mt-auto flex justify-end">
           <button
             title="Tag"
-            className="mr-1 rounded-2xl p-2 font-bold text-slate-500  hover:bg-slate-300 hover:text-slate-800"
+            className="mr-1 rounded-2xl p-2 font-bold text-slate-600  hover:bg-slate-300 hover:text-slate-800"
             onClick={() =>
               openColorMenus[note.id]
                 ? handleTagClose(note.id)
@@ -186,47 +246,39 @@ const NotesComponent: React.FC = () => {
               }}
             >
               <ul className="py-1">
-                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
-                  <div className="mr-2 h-4 w-4  rounded-2xl bg-red-500"></div>
-                  <span>Red</span>
-                </li>
-                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
-                  <div className="mr-2 h-4 w-4  rounded-2xl bg-orange-500"></div>
-                  <span>Orange</span>
-                </li>
-                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
-                  <div className="mr-2 h-4 w-4  rounded-2xl bg-yellow-500"></div>
-                  <span>Yellow</span>
-                </li>
-                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
-                  <div className="mr-2 h-4 w-4  rounded-2xl bg-green-500"></div>
-                  <span>Green</span>
-                </li>
-                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
-                  <div className="mr-2 h-4 w-4  rounded-2xl bg-blue-500"></div>
-                  <span>Blue</span>
-                </li>
-                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
-                  <div className="mr-2 h-4 w-4  rounded-2xl bg-indigo-500"></div>
-                  <span>Indigo</span>
-                </li>
-                <li className=" flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100">
-                  <div className="mr-2 h-4 w-4  rounded-2xl bg-violet-500"></div>
-                  <span>Violet</span>
-                </li>
+                {Object.entries(colorPresets).map(
+                  ([color, className], index) => (
+                    <li
+                      key={index}
+                      className="flex cursor-pointer flex-row items-center px-4 py-2 hover:bg-gray-100"
+                      onClick={() => {
+                        localStorage.setItem(
+                          `NoteColor_${note.id}`,
+                          JSON.stringify(className),
+                        );
+                        handleColorClick(note.id, className);
+                      }}
+                    >
+                      <div
+                        className={`mr-2 h-4 w-4 rounded-2xl ${className}`}
+                      ></div>
+                      <span>{color}</span>
+                    </li>
+                  ),
+                )}
               </ul>
             </div>
           )}
           <button
             title="Edit"
-            className="mr-1 rounded-2xl p-2 font-bold text-slate-500  hover:bg-slate-300 hover:text-slate-800"
+            className="mr-1 rounded-2xl p-2 font-bold text-slate-600  hover:bg-slate-300 hover:text-slate-800"
             onClick={() => handleEdit(note.id)}
           >
             <PencilIcon className="w-3 md:w-4" />
           </button>
           <button
             title="Delete"
-            className="mr-1 rounded-2xl p-2 font-bold text-slate-500 hover:bg-slate-300 hover:text-slate-800"
+            className="mr-1 rounded-2xl p-2 font-bold text-slate-600 hover:bg-slate-300 hover:text-slate-800"
             onClick={() => handleDelete(note.id)}
           >
             <TrashIcon className="w-3 md:w-4" />
