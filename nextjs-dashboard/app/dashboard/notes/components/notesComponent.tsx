@@ -27,14 +27,17 @@ const colorPresets: { [key: string]: string } = {
 };
 
 const NotesComponent: React.FC = () => {
-  const initialNotes = JSON.parse(localStorage.getItem('Notes') || '[]') || [];
-  const initialColors = initialNotes.reduce(
-    (acc: { [key: string]: string }, note: Note) => {
-      acc[note.id] = note.color;
-      return acc;
-    },
-    {},
-  );
+  const initialNotes =
+    typeof window !== 'undefined'
+      ? JSON.parse(localStorage.getItem('Notes') || '[]') || []
+      : [];
+  const initialColors =
+    initialNotes.length > 0
+      ? initialNotes.reduce((acc: { [key: string]: string }, note: Note) => {
+          acc[note.id] = note.color;
+          return acc;
+        }, {})
+      : {};
 
   const [state, setState] = useState({
     notes: initialNotes,
@@ -46,6 +49,12 @@ const NotesComponent: React.FC = () => {
     openColorMenus: {},
     shouldRenderNotes: true,
   });
+
+  useEffect(() => {
+    const initialNotes =
+      JSON.parse(localStorage.getItem('Notes') || '[]') || [];
+    setNotes(initialNotes);
+  }, [state.notes]);
 
   const tagButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -150,12 +159,6 @@ const NotesComponent: React.FC = () => {
   const [selectedNoteColor, setSelectedNoteColor] = useState<{
     [key: string]: string;
   }>();
-
-  useEffect(() => {
-    const initialNotes =
-      JSON.parse(localStorage.getItem('Notes') || '[]') || [];
-    setNotes(initialNotes);
-  }, [state.notes]);
 
   const [openColorMenus, setOpenColorMenus] = useState<{
     [key: string]: boolean;
