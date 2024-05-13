@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import NoteForm from './noteForm';
 import NotesContainer from './notesContainer';
@@ -44,6 +44,7 @@ const NotesComponent: React.FC = () => {
     editId: '',
     isModalOpen: false,
     openColorMenus: {},
+    shouldRenderNotes: true,
   });
 
   const tagButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
@@ -78,6 +79,10 @@ const NotesComponent: React.FC = () => {
       );
     }
 
+    // Update local storage
+    localStorage.setItem('Notes', JSON.stringify(newNoteArr));
+
+    // Update state to trigger re-render
     setState((prevState) => ({
       ...prevState,
       notes: newNoteArr,
@@ -103,6 +108,7 @@ const NotesComponent: React.FC = () => {
     setState((prevState) => ({
       ...prevState,
       notes: prevState.notes.filter((note: Note) => note.id !== id),
+      shouldRenderNotes: prevState.notes.length > 1,
     }));
   };
 
@@ -136,6 +142,7 @@ const NotesComponent: React.FC = () => {
       ...prevState,
       notes: [],
       isModalOpen: false,
+      shouldRenderNotes: prevState.notes.length > 1,
     }));
   };
 
@@ -148,7 +155,7 @@ const NotesComponent: React.FC = () => {
     const initialNotes =
       JSON.parse(localStorage.getItem('Notes') || '[]') || [];
     setNotes(initialNotes);
-  }, []);
+  }, [state.notes]);
 
   const [openColorMenus, setOpenColorMenus] = useState<{
     [key: string]: boolean;
@@ -325,7 +332,7 @@ const NotesComponent: React.FC = () => {
               }}
             />
             <NotesContainer>
-              {notes.length > 0 ? (
+              {state.shouldRenderNotes && notes.length > 0 ? (
                 <>
                   <h2 className={`${tiltNeon.className} mb-3 text-xl`}>
                     Noteworthy List
