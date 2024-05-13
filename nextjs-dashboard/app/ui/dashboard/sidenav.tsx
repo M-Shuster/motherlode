@@ -11,7 +11,7 @@ export default function SideNav() {
         className="mb-2 flex h-20 items-end justify-start rounded-md bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-40% to-emerald-500 to-90%  p-4 md:h-40"
         href="/"
       >
-        <div className="w-32 text-white md:w-40">
+        <div className="w-32 text-white md:w-full">
           <MDWLogo />
         </div>
       </Link>

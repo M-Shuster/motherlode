@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import TasklistForm from './tasklistForm';
-import Header from './header';
+import TasklistHeader from './tasklistHeader';
 import TasklistContainer from './tasklistContainer';
 import ConfirmModal from './confirmModal';
 import ErrorModal from './errorModal';
@@ -112,7 +112,10 @@ const TasklistComponent: React.FC = () => {
   };
 
   const handleClear = () => {
-    setIsModalOpen(true);
+    if (tasks.length > 0) {
+      setIsModalOpen(true);
+    }
+    return;
   };
 
   const handleConfirmClear = () => {
@@ -305,7 +308,7 @@ const TasklistComponent: React.FC = () => {
         }w-full rounded-xl bg-slate-100 p-4 shadow-md md:w-4/6`}
       >
         <div className="TasklistComp_child">
-          <Header />
+          <TasklistHeader />
           <TasklistForm
             onSubmit={handleSubmit}
             value={newTask}

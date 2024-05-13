@@ -8,7 +8,7 @@ interface ModalProps {
   modalClassName: string;
 }
 
-const ConfirmModal: React.FC<ModalProps> = ({
+const NotesConfirmModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
@@ -35,8 +35,7 @@ const ConfirmModal: React.FC<ModalProps> = ({
             </button>
           </div>
           <div className="position: relative bottom-4">
-            <p>Are you sure you want to clear all tasks?</p>
-            <p>This will delete all tasks, even completed ones.</p>
+            <p>Are you sure you want to clear all notes?</p>
           </div>
           <button
             className="mr-4 min-w-[100px] rounded bg-red-800 px-2 py-1 text-white placeholder:rounded hover:font-bold"
@@ -56,4 +55,4 @@ const ConfirmModal: React.FC<ModalProps> = ({
   );
 };
 
-export default ConfirmModal;
+export default NotesConfirmModal;
