@@ -1,6 +1,7 @@
 import '@/app/ui/global.css';
 import { montserrat } from '@/app/ui/fonts';
 import { Metadata } from 'next';
+import { ThemeProvider } from './contexts/theme/theme-provider';
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${montserrat.className} antialiased`}>{children}</body>
+      <ThemeProvider>
+        <body className={`${montserrat.className} antialiased`}>
+          {children}
+        </body>
+      </ThemeProvider>
     </html>
   );
 }

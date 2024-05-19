@@ -15,6 +15,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/20/solid';
 import { tiltNeon } from '@/app/ui/fonts';
+import { useTheme } from '@/app/contexts/theme/theme-provider';
 
 interface Task {
   id: string;
@@ -50,6 +51,7 @@ const randomRunescapeTasks: string[] = [
 ];
 
 const TasklistComponent: React.FC = () => {
+  const theme = useTheme();
   const initialTaskState = (): Task[] => {
     if (typeof window !== 'undefined') {
       return JSON.parse(localStorage.getItem('Tasks') || '[]') || [];
@@ -237,6 +239,7 @@ const TasklistComponent: React.FC = () => {
     textDecoration: 'line-through',
     fontWeight: '100',
     fontStyle: 'italic',
+    color: theme.colors.secondary,
   };
 
   const TaskLists = tasks.map((task) => {
