@@ -7,6 +7,27 @@ const {
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
+// async function seedNotes(client) {
+//   try {
+//     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//     // Create the "notes" table if it doesn't exist
+//     const createTable = await client.sql`
+//       CREATE TABLE IF NOT EXISTS notes (
+//         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+//         name VARCHAR(255) NOT NULL,
+//         email TEXT NOT NULL UNIQUE,
+//         password TEXT NOT NULL
+//       );
+//     `;
+
+//     console.log(`Created "notes" table`);
+
+//     const insertedNotes = await Promise.all(
+//       notes.map(async (note) => {
+//         const
+//       })
+//     )
+
 async function seedUsers(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -16,7 +37,8 @@ async function seedUsers(client) {
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        access TEXT NOT NULL
       );
     `;
 
@@ -27,8 +49,8 @@ async function seedUsers(client) {
       users.map(async (user) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         return client.sql`
-        INSERT INTO users (id, name, email, password)
-        VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
+        INSERT INTO users (id, name, email, password, access)
+        VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword}, ${user.access})
         ON CONFLICT (id) DO NOTHING;
       `;
       }),
