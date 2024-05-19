@@ -1,31 +1,20 @@
 import MDWLogo from '@/app/ui/mdw-logo';
-import LoginForm from '@/app/ui/login-form';
-import Image from 'next/image';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
-export default function LoginPage() {
+export default function Page() {
   return (
-    <main className="flex items-center justify-center md:h-screen">
-      <Image
-        src="/login-background-desktop.jpeg"
-        fill
-        style={{ objectFit: 'cover' }}
-        className="hidden opacity-75 md:block"
-        alt="Login page desktop background image"
-      />
-      <Image
-        src="/login-background-mobile.jpeg"
-        fill
-        style={{ objectFit: 'cover' }}
-        className=" block opacity-75 md:hidden"
-        alt="Login page mobile background image"
-      />
-      <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
-        <div className="flex h-20 w-full items-end rounded-lg bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-40% to-emerald-500 to-90% p-3  md:h-36">
-          <div className="w-auto text-white">
-            <MDWLogo />
-          </div>
-        </div>
-        <LoginForm />
+    <main className="flex min-h-screen flex-col p-6">
+      <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
+        <MDWLogo />
+      </div>
+      <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
+        <Link
+          href="/login"
+          className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
+        >
+          <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
+        </Link>
       </div>
     </main>
   );
