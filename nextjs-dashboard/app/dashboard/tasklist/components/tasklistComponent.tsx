@@ -15,7 +15,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/20/solid';
 import { tiltNeon } from '@/app/ui/fonts';
-import { useTheme } from '@/app/contexts/theme/theme-provider';
+import { useTheme } from '@/app/contexts/theme-provider';
 
 interface Task {
   id: string;
