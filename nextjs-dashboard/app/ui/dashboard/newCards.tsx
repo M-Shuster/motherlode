@@ -30,7 +30,7 @@ export default async function NewCardWrapper() {
       {/* NOTE: comment in this code when you get to this point in the course */}
 
       <Card title="Users" value={numberOfUsers} type="users" />
-      <Card title="Pending" value={totalPendingInvoices} type="pending" />
+      {/* <Card title="Pending" value={totalPendingInvoices} type="pending" /> */}
       <Card title="Total Notes" value={numberOfInvoices} type="notes" />
       <Card
         title="Outstanding Tasks"
