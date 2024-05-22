@@ -1,7 +1,7 @@
 import '@/app/ui/global.css';
 import { montserrat } from '@/app/ui/fonts';
 import { Metadata } from 'next';
-import { ThemeProvider } from './contexts/theme/theme-provider';
+import { AuthProvider, ThemeProvider, UserAccessProvider } from './contexts';
 
 export const metadata: Metadata = {
   title: {
@@ -19,11 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <ThemeProvider>
-        <body className={`${montserrat.className} antialiased`}>
-          {children}
-        </body>
-      </ThemeProvider>
+      <AuthProvider>
+        <UserAccessProvider>
+          <ThemeProvider>
+            <body className={`${montserrat.className} antialiased`}>
+              {children}
+            </body>
+          </ThemeProvider>
+        </UserAccessProvider>
+      </AuthProvider>
     </html>
   );
 }
