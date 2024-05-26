@@ -3,8 +3,8 @@
 Multi page application which will contain:
 
 - Login page which takes to a user's specific configured area. Admin area will have more features
-- Orderable task list which will access and manage state
-- Notes area
+  <!-- - Orderable task list which will access and manage state -->
+  <!-- - Notes area -->
 - Information/FAQ area with expanding sections
 - Preview area
 - Handling of user's responses to questions (admin only state)

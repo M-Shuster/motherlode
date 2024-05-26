@@ -1,80 +1,75 @@
-'use client';
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from 'react';
-import { sql } from '@vercel/postgres';
-import { User } from '@/app/lib/definitions';
-import { useAuth } from './auth-provider';
+//TODO: figure out if context is required after using proper auth proceedure
 
-interface UserAccessContextType {
-  access: string | null;
-  setAccess: (access: string) => void;
-}
+// 'use client';
+// import React, {
+//   createContext,
+//   useContext,
+//   useState,
+//   useEffect,
+//   ReactNode,
+// } from 'react';
+// import { QueryResult, sql } from '@vercel/postgres';
+// import { useAuth } from './auth-provider';
 
-const UserAccessContext = createContext<UserAccessContextType | undefined>(
-  undefined,
-);
+// interface UserAccessContextType {
+//   access: string | null;
+//   setAccess: (access: string) => void;
+// }
 
-const getUserAccessLevel = async (email: string): Promise<string | null> => {
-  try {
-    console.log('Fetching access level for email:', email);
-    const user = await sql<User>`SELECT access FROM users WHERE email=${email}`;
-    console.log('User object from database:', user);
-    console.log('User access level:', user.rows[0]?.access);
-    return user.rows[0]?.access || null;
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error('Failed to fetch user access level:', error.message);
-      console.error('Error stack:', error.stack);
-    } else {
-      console.error('Failed to fetch user access level else block:', error);
-    }
-    return null;
-  }
-};
+// const UserAccessContext = createContext<UserAccessContextType | undefined>(
+//   undefined,
+// );
 
-interface UserAccessProviderProps {
-  children: ReactNode;
-}
+// interface UserAccessRow {
+//   access: string;
+// }
 
-export const UserAccessProvider: React.FC<UserAccessProviderProps> = ({
-  children,
-}) => {
-  const { email } = useAuth();
-  const [access, setAccess] = useState<string | null>(null);
+// async function getUserAccessLevel(email: string): Promise<string | null> {
+//   try {
+//     const result: QueryResult<UserAccessRow> =
+//       await sql<UserAccessRow>`SELECT access FROM users WHERE email = ${email}`;
+//     return result.rows[0]?.access ?? null;
+//   } catch (error) {
+//     console.error('Failed to fetch user access level:', error);
+//     throw new Error('Failed to fetch user access level.');
+//   }
+// }
 
-  useEffect(() => {
-    const fetchAccessLevel = async () => {
-      try {
-        if (email) {
-          const fetchedAccess = await getUserAccessLevel(email);
-          console.log('email', email);
-          console.log('Fetched access level:', fetchedAccess);
-          setAccess(fetchedAccess);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user access level:', error);
-      }
-    };
+// interface UserAccessProviderProps {
+//   children: ReactNode;
+// }
 
-    fetchAccessLevel();
-  }, [email]);
+// export const UserAccessProvider: React.FC<UserAccessProviderProps> = ({
+//   children,
+// }) => {
+//   const { email } = useAuth();
+//   const [access, setAccess] = useState<string | null>(null);
 
-  return (
-    <UserAccessContext.Provider value={{ access, setAccess }}>
-      {children}
-    </UserAccessContext.Provider>
-  );
-};
+//   console.log('email', email);
 
-export const useUserAccess = () => {
-  const context = useContext(UserAccessContext);
-  if (context === undefined) {
-    throw new Error('useUserAccess must be used within a UserAccessProvider');
-  }
-  return context;
-};
+//   useEffect(() => {
+//     if (email) {
+//       getUserAccessLevel(email).then((accessLevel) => {
+//         setAccess(accessLevel);
+//       });
+//     }
+//   }, [email]);
+
+//   if (!access) {
+//     return null; // or loading indicator
+//   }
+
+//   return (
+//     <UserAccessContext.Provider value={{ access, setAccess }}>
+//       {children}
+//     </UserAccessContext.Provider>
+//   );
+// };
+
+// export const useUserAccess = () => {
+//   const context = useContext(UserAccessContext);
+//   if (context === undefined) {
+//     throw new Error('useUserAccess must be used within a UserAccessProvider');
+//   }
+//   return context;
+// };

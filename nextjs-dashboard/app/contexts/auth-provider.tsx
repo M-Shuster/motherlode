@@ -1,46 +1,48 @@
-'use client';
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from 'react';
+//TODO: figure out if context is required after using proper auth proceedure
 
-interface AuthContextType {
-  email: string | null;
-  setEmail: (email: string) => void;
-}
+// 'use client';
+// import React, {
+//   createContext,
+//   useContext,
+//   useState,
+//   useEffect,
+//   ReactNode,
+// } from 'react';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// interface AuthContextType {
+//   email: string | null;
+//   setEmail: (email: string) => void;
+// }
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
+// const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [email, setEmail] = useState<string | null>(null);
+// interface AuthProviderProps {
+//   children: ReactNode;
+// }
 
-  useEffect(() => {
-    const fetchUserEmail = async () => {
-      const userEmail = 'master@mail.com'; // Replace with actual email fetching logic
-      setEmail(userEmail);
-    };
+// export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+//   const [email, setEmail] = useState<string | null>(null);
 
-    fetchUserEmail();
-  }, []);
+//   useEffect(() => {
+//     const fetchUserEmail = async () => {
+//       const userEmail = 'master@mail.com'; // Replace with actual email fetching logic
+//       setEmail(userEmail);
+//     };
 
-  return (
-    <AuthContext.Provider value={{ email, setEmail }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+//     fetchUserEmail();
+//   }, []);
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+//   return (
+//     <AuthContext.Provider value={{ email, setEmail }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => {
+//   const context = useContext(AuthContext);
+//   if (context === undefined) {
+//     throw new Error('useAuth must be used within an AuthProvider');
+//   }
+//   return context;
+// };

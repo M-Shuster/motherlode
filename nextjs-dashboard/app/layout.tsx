@@ -19,15 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <UserAccessProvider>
-          <ThemeProvider>
-            <body className={`${montserrat.className} antialiased`}>
-              {children}
-            </body>
-          </ThemeProvider>
-        </UserAccessProvider>
-      </AuthProvider>
+      {/* <AuthProvider>
+        <UserAccessProvider> */}
+      <ThemeProvider>
+        <body className={`${montserrat.className} antialiased`}>
+          {children}
+        </body>
+      </ThemeProvider>
+      {/* </UserAccessProvider>
+      </AuthProvider> */}
     </html>
   );
 }

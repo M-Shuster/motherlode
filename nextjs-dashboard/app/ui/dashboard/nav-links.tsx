@@ -26,17 +26,17 @@ const links = [
 
 export default function NavLinks() {
   const pathname = usePathname();
-  const { access } = useUserAccess();
-  console.log('Access level in NavLinks:', access);
+  // const { access } = useUserAccess();
+  // console.log('Access level in NavLinks:', access);
 
   return (
     <>
       {links.map((link) => {
         const LinkIcon = link.icon;
         // Only show the "Invoices" link if the user is an admin
-        if (link.name === 'Invoices' && access !== 'admin') {
-          return null;
-        }
+        // if (link.name === 'Invoices' && access !== 'admin') {
+        //   return null;
+        // }
         return (
           <Link
             key={link.name}
