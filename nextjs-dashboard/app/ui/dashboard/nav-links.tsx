@@ -9,7 +9,6 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { useUserAccess } from '@/app/contexts/user-provider';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this could be stored in a database.
@@ -26,8 +25,6 @@ const links = [
 
 export default function NavLinks() {
   const pathname = usePathname();
-  // const { access } = useUserAccess();
-  // console.log('Access level in NavLinks:', access);
 
   return (
     <>

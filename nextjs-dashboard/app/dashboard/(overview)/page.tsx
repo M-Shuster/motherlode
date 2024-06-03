@@ -1,46 +1,36 @@
 // import CardWrapper from '@/app/ui/dashboard/cards';
 import NewCardWrapper from '@/app/ui/dashboard/newCards';
-import RevenueChart from '@/app/ui/dashboard/revenue-chart';
-import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
 import { tiltNeon } from '@/app/ui/fonts';
 import { fetchCardData } from '@/app/lib/data';
 import { Suspense } from 'react';
-import {
-  LatestInvoicesSkeleton,
-  RevenueChartSkeleton,
-  CardsSkeleton,
-} from '@/app/ui/skeletons';
+import { CardsSkeleton } from '@/app/ui/skeletons';
 import { Metadata } from 'next';
+import { auth } from '@/auth';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
 };
 
 export default async function Page() {
+  // whilst the property doesn't exist on the type of session, it looks like it overwrites it on a case by case basis
+  const { user } = await auth();
   const {
     totalPaidInvoices,
     totalPendingInvoices,
     numberOfInvoices,
     numberOfCustomers,
   } = await fetchCardData();
+
   return (
     <main>
       <h1 className={`${tiltNeon.className} mb-4 text-xl md:text-2xl`}>
-        Dashboard
+        Welcome to the Dashboard {user?.name}!
       </h1>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
           <NewCardWrapper />
         </Suspense>
       </div>
-      {/* <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        <Suspense fallback={<RevenueChartSkeleton />}>
-          <RevenueChart />
-        </Suspense>
-        <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
-        </Suspense>
-      </div> */}
     </main>
   );
 }
