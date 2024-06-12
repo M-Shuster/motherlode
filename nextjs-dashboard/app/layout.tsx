@@ -5,10 +5,10 @@ import { ThemeProvider } from './contexts';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme Dashboard',
+    template: '%s | MDW Dashboard',
+    default: 'MDW Dashboard',
   },
-  description: 'The official Next.js Learn Dashboard built with App Router.',
+  description: 'The official Next.js MDW Dashboard built with App Router.',
   metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
 };
 
