@@ -1,7 +1,7 @@
 const calcSkillPicker = () => {
   return (
     <div>
-      <button>Skill</button>
+      <input type="image" src="/OSRS_ICONS/Magic_icon.png" />
     </div>
   );
 };

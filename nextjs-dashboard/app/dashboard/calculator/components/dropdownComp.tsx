@@ -7,10 +7,9 @@ import {
   Button,
   cn,
 } from '@nextui-org/react';
-// import { AddNoteIcon } from './AddNoteIcon';
-// import { CopyDocumentIcon } from './CopyDocumentIcon';
-// import { EditDocumentIcon } from './EditDocumentIcon';
-// import { DeleteDocumentIcon } from './DeleteDocumentIcon';
+
+// All of  these needs to be replaced with a lookup from a database based on what skill has been picked.
+// Therefore, once a skill has been picked, an event needs to be triggered that then causes this component to render with some values
 
 const DropdownComponent = () => {
   const iconClasses =
@@ -19,7 +18,7 @@ const DropdownComponent = () => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="bordered">Open Menu</Button>
+        <Button variant="bordered">Open task list</Button>
       </DropdownTrigger>
       <DropdownMenu variant="faded" aria-label="Dropdown menu with icons">
         <DropdownItem
